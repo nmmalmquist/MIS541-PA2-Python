@@ -345,7 +345,7 @@ def report_menu():
     print("  REPORT MENU")
     print("----------------")
     print("1) Rating Statistics For a Given Year")
-    print("2) Return to main menu")
+    print("2) Reviews and Average Rating by Car Name")
 
 #Main routing method for the report menu
 def reports_module(car_data, review_data):
@@ -360,7 +360,7 @@ def reports_module(car_data, review_data):
                 return_to_menu()
             case 2:
                 #goes into reviews module   
-                #review_and_ratings_by_car()
+                review_and_ratings_by_car(review_data)
                 return_to_menu()
             case 3:
                 #goes into the reports section
@@ -392,25 +392,56 @@ def calc_rating_stats_by_year(review_data, usr_input_year):
     except:
         return f"There were no reviews in {usr_input_year}"
 
+#dedicated method to run for report menu item 2
+#it is supposed to list the car, the average rating, and each review with the rating
+def review_and_ratings_by_car(review_data):
+    review_data_sorted_by_name = sorted(review_data, key=itemgetter(1), reverse=False)
+    #intial seeting values for control break
+    car_review_report_list = []
+    count = 1
+    total_rating_count = review_data_sorted_by_name[0][3]
+    current_car_name = review_data_sorted_by_name[0][1]
+    #this variable will hold all of the reviews and rating for the car we are focusing on 
+    current_car_reviews = [{"text_review": review_data_sorted_by_name[0][4], "rating":review_data_sorted_by_name[0][3]}]
+    for review in review_data_sorted_by_name[1:]:
+        if current_car_name == review[1]:
+            count += 1
+            total_rating_count += review[3]
+            current_car_reviews.append({"text_review": review[4], "rating": review[3]})
+        else:
+            total_rating_count, count, current_car_reviews, current_car_name = break_review_and_ratings_by_car(total_rating_count, count, current_car_reviews, current_car_name, review, car_review_report_list)
+    #must run again to avoid fence post error
+    break_review_and_ratings_by_car(total_rating_count, count, current_car_reviews, current_car_name, review, car_review_report_list)
+    save_and_print_review_and_ratings_by_car_to_file(car_review_report_list)
 
-# def process_rating_stats_by_year(review_data):
-#     review_data_sorted_by_name = sorted(review_data,itemgetter(2))
-#     this_min = review_data_sorted_by_name[0][3]
-#     this_max = this_min
-#     total = this_min
-#     count = 1
-#     current_year = review_data_sorted_by_name[0][2].strftime("YYYY")
-#     for review in review_data_sorted_by_name[1:]:
-#         if current_year == review[1].strftime("YYYY"):
-#             this_min = review[3] if review[3] < this_min else None
-#             this_max = review[3] if review[3] > this_max else None
-#             total += review[3]
-#             count += 1
-#         else:
-#            this_max, this_min, total, count, review = break_rating_stats_by_year(current_year,this_max, this_min, total, count, review)
+#break for the method above
+def break_review_and_ratings_by_car(total_rating_count, count, current_car_reviews, current_car_name, review, car_review_report_list):
+    #because lists are passed as reference, changes in here will change the value in parent method
+    car_review_report_list.append({"car_name": current_car_name, "reviews": current_car_reviews, "average_rating":total_rating_count/count})
+    #reset values for next car
+    count = 1
+    total_rating_count = review[3]
+    current_car_name = review[1]
+    current_car_reviews = [{"text_review": review[4], "rating":review[3]}]
+    return total_rating_count, count, current_car_reviews, current_car_name
 
-# def break_rating_stats_by_year(current_year, this_max, this_min, total, count, review):
-#     pass
+#both saves the rated from the review_and_ratings_by_car_to_file report to file and prints on console
+def save_and_print_review_and_ratings_by_car_to_file(car_review_report_list):
+    output_file = open("./reports/avg_rating_by_car.txt", "w")
+    for group in car_review_report_list:
+        output_file.write(f"Car Name: {group['car_name']}\n")
+        output_file.write(f"Average Rating: {group['average_rating']}\n")
+        output_file.write(f"Reviews:\n")
+        print(f"Car Name: {group['car_name']}")
+        print(f"Average Rating: {group['average_rating']}")
+        print(f"Reviews:")
+        for review in group["reviews"]:
+            output_file.write(f"\t{review['text_review']}\n")
+            output_file.write(f"\tRating: {review['rating']}\n\n")
+            print(f"\t{review['text_review']}")
+            print(f"\tRating: {review['rating']}\n")
+    output_file.close()
+    print("\nSaved to file: ./reports/avg_rating_by_car.txt")
 
 def get_year(message):
     usr_input = input(message)

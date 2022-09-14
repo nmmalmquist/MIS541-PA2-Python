@@ -1,0 +1,60 @@
+Car Name: d
+Average Rating: 3.0
+Reviews:
+	cfff
+	Rating: 3
+
+Car Name: jack
+Average Rating: 0.0
+Reviews:
+	Jack is awesome
+	Rating: 0
+
+Car Name: rockstar
+Average Rating: 3.4
+Reviews:
+	It's alright. Gives me some trouble some times. 
+	Rating: 3
+
+	Awesome car. Loved it.
+	Rating: 5
+
+	Average car.
+	Rating: 3
+
+	Don't get it
+	Rating: 2
+
+	NIck
+	Rating: 4
+
+Car Name: starship
+Average Rating: 7.0
+Reviews:
+	Nice car. Would recommend it.
+	Rating: 4
+
+	this is cool
+	Rating: 10
+
+Car Name: suave
+Average Rating: 2.3333333333333335
+Reviews:
+	Nice car. Have driven it quite a bit with much trouble.
+	Rating: 4
+
+	I do not like it. Don't get it.
+	Rating: 2
+
+	Don't recommend the car. Didn't like it!!! Don't buy it.
+	Rating: 1
+
+Car Name: trend
+Average Rating: 3.5
+Reviews:
+	Had issues with the brakes.
+	Rating: 3
+
+	Good car. The media system is not great though.
+	Rating: 4
+
