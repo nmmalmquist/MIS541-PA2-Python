@@ -9,6 +9,8 @@ def main():
     menu_route()
 
 def display_menu():
+    print("   MAIN MENU")
+    print("-----------------")
     print("1. Car Iventory Menu")
     print("2. Review Menu")
     print("3. Reports Menu")
@@ -35,7 +37,7 @@ def menu_route():
                 pass
             case 3:
                 #goes into the reports section
-                #reports_module()
+                reports_module(cars_data, review_data)
                 pass
             case 4:
                 #exit
@@ -89,7 +91,6 @@ def get_review_data_from_file():
         input("\n\nPress ENTER to return to the main menu...")
         return
     
-
     reviews_file = open("./reviews.txt")
     review_data = []
 
@@ -105,11 +106,14 @@ def get_review_data_from_file():
     return review_data
     
 def display_inventory_menu():
+    print("   INVENTORY MENU")
+    print("---------------------")
     print("1) Add to the inventory")
     print("2) Edit car's data in inventory")
     print("3) Delete a car from inventory")
     print("4) Exit to main menu")
 
+#main routing method for item 1 in main menu
 def inventory_module(cars_data):
     keep_going = True
     while keep_going:
@@ -134,7 +138,7 @@ def inventory_module(cars_data):
                 clear_console()
                 keep_going = False
 
-    
+#main method for adding a car to inventory file
 def add_inventory(car_data):
     display_cars(car_data)
     print("\nWhat is the name of the car you would like to add to this list? (Enter :qt to return to menu)\n")
@@ -151,6 +155,7 @@ def add_inventory(car_data):
     car_data.append([car_name,car_type,car_year,car_price])
     save_to_file(car_data, "./cars.txt")
 
+#main method for editing a car
 def edit_inventory(car_data):
     display_cars(car_data)
     print("\nWhat is the name of the car you would like to edit (enter :qt to exit)?\n")
@@ -179,13 +184,16 @@ def edit_inventory(car_data):
     
     save_to_file(car_data, path="./cars.txt")
 
+#No soft deleting, removes directly from list
 def delete_inventory(car_data):
     display_cars(car_data)
     print("\nWhat is the name of the car you would like to delete? (:qt to exit)\n")
+    #value for user to enter to leave the deleting process
     usr_input = input()
     if usr_input == ":qt":
         return
     car_index = get_index_of_car_by_name(car_data,usr_input)
+    #a try/except to catch if the action isn't completed
     try:
         del car_data[car_index]
         save_to_file(car_data, "./cars.txt")
@@ -194,10 +202,12 @@ def delete_inventory(car_data):
     
 def get_car_type():
     usr_input = input().lower()
+    #list of possible usr input value for type
     type_list = ["sedan","hatchback","suv","truck","van","convertible"]
     while usr_input not in type_list:
         usr_input = input("Please insert either sedan, hatchback, suv, truck, van, or convertible: ")
     return usr_input
+
 def get_valid_year():
     from_year = 2010
     to_year = 2020
@@ -205,6 +215,8 @@ def get_valid_year():
     while (usr_int > to_year or usr_int < from_year):
         usr_int = get_int("\nPlease give a year between 2010 and 2020.\n\n")
     return usr_int
+
+#The only error handling her is making sure their input is not less than 0.
 def get_valid_price():
     usr_int = get_int("\nPlease enter a Price for the car\n\n")
     if(usr_int <= 0.0000000000000000000000000000001):
@@ -221,7 +233,8 @@ def get_index_of_car_by_name(car_data, car_name):
             return i
     #theoretically, it hsould never get to this point
     return -1
-    
+
+#used for asking user for a car name and checking to make sure that does not exist. This is because the car name must be unique
 def get_unique_car_name(car_data, car_name):
     while (not is_name_unique(car_data, car_name) or len(car_name) < 1):
         if len(car_name) < 1:
@@ -238,7 +251,7 @@ def is_name_unique(car_data, car_name):
     return True
             
         
-
+#general file that handles cars and reviews file saving
 def save_to_file(file_data, path):
     if(path == "./reviews.txt"):
         prep_review_for_saving(file_data)
@@ -256,17 +269,19 @@ def save_to_file(file_data, path):
     car_file.writelines(prepped_file_data)
     car_file.close()
 
+#needed to format the date into a correclty formated string before saving
 def prep_review_for_saving(review_data):
     for i in range(0, len(review_data)):
-        print(review_data[i][2])
-        input()
         temp = review_data[i][2].strftime("%m-%d-%Y")
         review_data[i][2] = temp
 
 def review_menu():
+    print("  REVIEW MENU")
+    print("----------------")
     print("1) Create a Review")
     print("2) Return to main menu")
-    
+
+#main method for item 2 in main menu 
 def review_module(review_data, cars_data):
     keep_going = True
     while keep_going:
@@ -295,6 +310,7 @@ def create_review(review_data,cars_data):
     review_data.append([this_id, car_to_review, todate, rating, review])
     save_to_file(review_data, "./reviews.txt")
     
+#getting the textual review
 def get_review():
     clear_console()
     print(f"Please type in your textual review:\n\n")
@@ -302,18 +318,20 @@ def get_review():
     while usr_input == "":
         usr_input = input("\nPlease enter atleast one character:\n\n")
     return usr_input
-
+#get numerical rating 0-10
 def get_rating():
     clear_console()
-    usr_input = get_int(f"Please type in your numerical rating 1-10:\n\n")
+    usr_input = get_int(f"Please type in your numerical rating 0-10:\n\n")
     while usr_input > 10 or usr_input < 0:
-        usr_input = get_int("\nPlease enter an integer 1-10:\n\n")
+        usr_input = get_int("\nPlease enter an integer 0-10:\n\n")
     return usr_input
 
+#need to implement auto-incrementing ID's
 def get_next_id(review_data):
     review_data = sorted(review_data, reverse=True, key=itemgetter(0))
     return int(review_data[0][0]) + 1
-    
+
+#need to make sure the car name exists
 def get_car_name_to_review(cars_data):
     display_cars(cars_data)
     car_to_review = input("\n type in the name of the car you would like to review (:qt to exit)\n\n")
@@ -322,7 +340,95 @@ def get_car_name_to_review(cars_data):
     while is_name_unique(cars_data, car_to_review):
         car_to_review = input("\n Please input an existing car name.\n\n")
     return car_to_review
-    
+
+def report_menu():
+    print("  REPORT MENU")
+    print("----------------")
+    print("1) Rating Statistics For a Given Year")
+    print("2) Return to main menu")
+
+#Main routing method for the report menu
+def reports_module(car_data, review_data):
+    keep_going = True
+    while keep_going:
+        clear_console()
+        report_menu()
+        item = get_menu_item(4)
+        match item:
+            case 1:
+                rating_stats_by_year(review_data)
+                return_to_menu()
+            case 2:
+                #goes into reviews module   
+                #review_and_ratings_by_car()
+                return_to_menu()
+            case 3:
+                #goes into the reports section
+                #reviews_with_positive_words
+                return_to_menu()
+            case 4:
+                #exit
+                clear_console()
+                keep_going = False
+
+#outputs text to console and a file in the ./reports folder of the average, min, and max rating for a given year 
+def rating_stats_by_year(review_data):
+    usr_input_year = get_year("What year would you like to pull the review statistics for?\n")
+    output_file = open(f"./reports/rating_statistic_{usr_input_year}.txt", "w")
+    output_text = calc_rating_stats_by_year(review_data, usr_input_year)
+
+    clear_console()
+    print(output_text)
+
+    output_file.write(output_text)
+    output_file.close()
+
+#processing method for the statistics report
+def calc_rating_stats_by_year(review_data, usr_input_year):
+    year_review_list = [review for review in review_data if usr_input_year == review[2].year]
+    list_of_ratings = list(map(itemgetter(3), year_review_list))
+    try:
+        return f"In the year {usr_input_year}, the average rating is {sum(list_of_ratings)/len(list_of_ratings)}, the maximum is {max(list_of_ratings)}, and the minimum is {min(list_of_ratings)}"
+    except:
+        return f"There were no reviews in {usr_input_year}"
+
+
+# def process_rating_stats_by_year(review_data):
+#     review_data_sorted_by_name = sorted(review_data,itemgetter(2))
+#     this_min = review_data_sorted_by_name[0][3]
+#     this_max = this_min
+#     total = this_min
+#     count = 1
+#     current_year = review_data_sorted_by_name[0][2].strftime("YYYY")
+#     for review in review_data_sorted_by_name[1:]:
+#         if current_year == review[1].strftime("YYYY"):
+#             this_min = review[3] if review[3] < this_min else None
+#             this_max = review[3] if review[3] > this_max else None
+#             total += review[3]
+#             count += 1
+#         else:
+#            this_max, this_min, total, count, review = break_rating_stats_by_year(current_year,this_max, this_min, total, count, review)
+
+# def break_rating_stats_by_year(current_year, this_max, this_min, total, count, review):
+#     pass
+
+def get_year(message):
+    usr_input = input(message)
+    while not is_year_valid(usr_input):
+        usr_input = input("Please input a valid year: ")
+    return int(usr_input)
+
+def is_year_valid(usr_input):
+    try:
+        usr_input = int(usr_input)
+        if datetime.date.today().year < usr_input or usr_input < 1900:
+            return False
+    except:
+        return False
+    return True
+
+
+
 def get_int(message):
     usr_input = input(message)
     valid = False
