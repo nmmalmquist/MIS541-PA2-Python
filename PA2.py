@@ -346,6 +346,7 @@ def report_menu():
     print("----------------")
     print("1) Rating Statistics For a Given Year")
     print("2) Reviews and Average Rating by Car Name")
+    print("3) Get all positive reviews")
 
 #Main routing method for the report menu
 def reports_module(car_data, review_data):
@@ -364,7 +365,7 @@ def reports_module(car_data, review_data):
                 return_to_menu()
             case 3:
                 #goes into the reports section
-                #reviews_with_positive_words
+                reviews_with_positive_words(review_data)
                 return_to_menu()
             case 4:
                 #exit
@@ -443,6 +444,35 @@ def save_and_print_review_and_ratings_by_car_to_file(car_review_report_list):
     output_file.close()
     print("\nSaved to file: ./reports/avg_rating_by_car.txt")
 
+#prints and saves to file all reviews that have positive words located in ./positive_word_dictionary.txt
+def reviews_with_positive_words(review_data):
+    postive_words_file = open("./positive_word_dictionary.txt")
+    postive_words_list = postive_words_file.readlines()
+    postive_words_file.close()
+    postive_words_string =""
+    postive_reviews = []
+    #the regular expression "re.search" wants a format of words like "great|good|etc"
+    for word in postive_words_list:
+        postive_words_string += word.lower().replace("\n", "") + "|"
+    #to get rid of the last "|" in the string
+    postive_words_string = postive_words_string[:-1]
+    for review in review_data:
+        #this regular expression searches the review for the positive words
+        if re.search(postive_words_string, review[4].lower()):
+            postive_reviews.append(review)
+    print_and_save_positive_reviews(postive_reviews)
+
+def print_and_save_positive_reviews(postive_reviews):
+    output_file = open("./reports/comments_with_positive_words.txt", "w")
+    for review in postive_reviews:
+        output_file.write(f"Car Name: {review[1]}\n")
+        output_file.write(f"Average Rating: {review[3]}\n")
+        output_file.write(f"Review: {review[4]}\n")
+        print(f"Car Name: {review[1]}")
+        print(f"Average Rating: {review[3]}")
+        print(f"Review: {review[4]}\n")
+    output_file.close()
+
 def get_year(message):
     usr_input = input(message)
     while not is_year_valid(usr_input):
@@ -452,7 +482,7 @@ def get_year(message):
 def is_year_valid(usr_input):
     try:
         usr_input = int(usr_input)
-        if datetime.date.today().year < usr_input or usr_input < 1900:
+        if 2020 < usr_input or usr_input < 2015:
             return False
     except:
         return False
