@@ -11,7 +11,7 @@ Reviews:
 	Rating: 0
 
 Car Name: rockstar
-Average Rating: 3.4
+Average Rating: 4.666666666666667
 Reviews:
 	It's alright. Gives me some trouble some times. 
 	Rating: 3
@@ -28,14 +28,29 @@ Reviews:
 	NIck
 	Rating: 4
 
+	superb
+	Rating: 4
+
+	amazing car
+	Rating: 9
+
+	nice car
+	Rating: 9
+
+	another
+	Rating: 3
+
 Car Name: starship
-Average Rating: 7.0
+Average Rating: 6.0
 Reviews:
 	Nice car. Would recommend it.
 	Rating: 4
 
 	this is cool
 	Rating: 10
+
+	s
+	Rating: 4
 
 Car Name: suave
 Average Rating: 2.3333333333333335
@@ -50,11 +65,20 @@ Reviews:
 	Rating: 1
 
 Car Name: trend
-Average Rating: 3.5
+Average Rating: 5.6
 Reviews:
 	Had issues with the brakes.
 	Rating: 3
 
 	Good car. The media system is not great though.
 	Rating: 4
+
+	what an amazing car
+	Rating: 9
+
+	THis was amazing
+	Rating: 9
+
+	truck
+	Rating: 3
 

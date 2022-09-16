@@ -1,18 +1,30 @@
 Car Name: rockstar
 Average Rating: 5
-Reviews: Awesome car. Loved it.
+Review: Awesome car. Loved it.
 Car Name: suave
 Average Rating: 4
-Reviews: Nice car. Have driven it quite a bit with much trouble.
+Review: Nice car. Have driven it quite a bit with much trouble.
 Car Name: trend
 Average Rating: 4
-Reviews: Good car. The media system is not great though.
+Review: Good car. The media system is not great though.
 Car Name: starship
 Average Rating: 4
-Reviews: Nice car. Would recommend it.
+Review: Nice car. Would recommend it.
 Car Name: jack
 Average Rating: 0
-Reviews: Jack is awesome
+Review: Jack is awesome
 Car Name: rockstar
 Average Rating: 4
-Reviews: superb
+Review: superb
+Car Name: trend
+Average Rating: 9
+Review: what an amazing car
+Car Name: trend
+Average Rating: 9
+Review: THis was amazing
+Car Name: rockstar
+Average Rating: 9
+Review: amazing car
+Car Name: rockstar
+Average Rating: 9
+Review: nice car

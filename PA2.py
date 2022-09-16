@@ -4,8 +4,12 @@ import random, datetime
 import os
 import re
 import decimal
+from rich import print, pretty
+from rich.progress import track
+from time import sleep, time
 
 def main():
+    pretty.install()
     menu_route()
 
 def display_menu():
@@ -253,27 +257,30 @@ def is_name_unique(car_data, car_name):
         
 #general file that handles cars and reviews file saving
 def save_to_file(file_data, path):
-    if(path == "./reviews.txt"):
-        prep_review_for_saving(file_data)
-    #sort the data by name first, alphabetical
-    file_data = sorted(file_data,key=itemgetter(0))
-    prepped_file_data = []
-    #modifies the file_data to be ready for writelines to write to file. 
-    for i in range(0,len(file_data)):
-        #need to convert every car to a concetenated string with # demilited
-        temp = "#".join([str(j) for j in file_data[i]])
-        temp += "\n" #a new line to signify a another car
-        prepped_file_data.append(temp)
-    car_file = open(path,"w")
+        if(path == "./reviews.txt"):
+            prep_review_for_saving(file_data)
+        #sort the data by name first, alphabetical
+        file_data = sorted(file_data,key=itemgetter(0))
+        prepped_file_data = []
+        #modifies the file_data to be ready for writelines to write to file. 
+        for i in range(0,len(file_data)):
+            #need to convert every car to a concetenated string with # demilited
+            temp = "#".join([str(j) for j in file_data[i]])
+            temp += "\n" #a new line to signify a another car
+            prepped_file_data.append(temp)
+        for _ in track(range(15), description='[green]Saving report!'):
+            sleep(.1)
+        car_file = open(path,"w")
 
-    car_file.writelines(prepped_file_data)
-    car_file.close()
+        car_file.writelines(prepped_file_data)
+        car_file.close()
 
 #needed to format the date into a correclty formated string before saving
 def prep_review_for_saving(review_data):
     for i in range(0, len(review_data)):
-        temp = review_data[i][2].strftime("%m-%d-%Y")
-        review_data[i][2] = temp
+        if type(review_data[i][2]) == datetime.date:
+            temp = review_data[i][2].strftime("%m-%d-%Y")
+            review_data[i][2] = temp
 
 def review_menu():
     print("  REVIEW MENU")
@@ -347,6 +354,7 @@ def report_menu():
     print("1) Rating Statistics For a Given Year")
     print("2) Reviews and Average Rating by Car Name")
     print("3) Get all positive reviews")
+    print("4) Return to Main Menu")
 
 #Main routing method for the report menu
 def reports_module(car_data, review_data):
@@ -376,11 +384,12 @@ def reports_module(car_data, review_data):
 def rating_stats_by_year(review_data):
     usr_input_year = get_year("What year would you like to pull the review statistics for?\n")
     output_file = open(f"./reports/rating_statistic_{usr_input_year}.txt", "w")
-    output_text = calc_rating_stats_by_year(review_data, usr_input_year)
-
     clear_console()
-    print(output_text)
+    for _ in track(range(100), description='[green]Saving report!'):
+        sleep(.003)
+        output_text = calc_rating_stats_by_year(review_data, usr_input_year)
 
+    print("\n" + output_text)
     output_file.write(output_text)
     output_file.close()
 
@@ -441,6 +450,8 @@ def save_and_print_review_and_ratings_by_car_to_file(car_review_report_list):
             output_file.write(f"\tRating: {review['rating']}\n\n")
             print(f"\t{review['text_review']}")
             print(f"\tRating: {review['rating']}\n")
+    for _ in track(range(15), description='[green]Saving report!'):
+        sleep(.1)
     output_file.close()
     print("\nSaved to file: ./reports/avg_rating_by_car.txt")
 
@@ -471,6 +482,8 @@ def print_and_save_positive_reviews(postive_reviews):
         print(f"Car Name: {review[1]}")
         print(f"Average Rating: {review[3]}")
         print(f"Review: {review[4]}\n")
+    for _ in track(range(15), description='[green]Saving report!'):
+        sleep(.1)
     output_file.close()
 
 def get_year(message):

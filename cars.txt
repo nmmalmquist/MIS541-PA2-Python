@@ -1,5 +1,6 @@
-alphabet#convertible#2011#4000.0
-rockstar#suv#2018#39000.0
+madster#sedan#2011#50000
+rockstar#truck#2018#39000.0
 starship#hatchback#2019#29000.0
 suave#sedan#2000#38000.5
+timscar#truck#2011#23.0
 trend#sedan#2010#6000.0
